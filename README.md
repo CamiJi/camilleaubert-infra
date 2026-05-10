@@ -1,149 +1,65 @@
-# camilleaubert-infra
+# Camille Aubert infrastructure
 
-Infrastructure repository for the `camilleaubert.com` platform.
+This repository documents and supports the production infrastructure for the Camille Aubert portfolio and related services.
 
-## Purpose
+## Scope
 
-This repository contains the infrastructure and operations documentation required to host, secure, expose, and evolve the Camille Aubert web platform.
+This repo is the infrastructure reference for:
 
-It is the source of truth for:
-- infrastructure audit,
-- DNS mapping,
-- SSL and public exposure notes,
-- reverse proxy documentation,
-- deployment operations,
-- future subdomain hosting strategy.
+- production hosting topology
+- reverse proxy setup and conventions
+- deployment strategy and checklist
+- operational notes for server-side services
 
-## Related repositories
+Application-specific code for the portfolio lives in:
 
-### Main repositories
-- **Portfolio repository:** `CamiJi/camilleaubert.com`
-- **Infrastructure repository:** `CamiJi/camilleaubert-infra`
+- `CamiJi/camilleaubert.com`
 
-## Repository responsibilities
+## Current production architecture
 
-### `camilleaubert-infra`
-Contains:
-- server audit,
-- Cloudflare notes,
-- Nginx Proxy Manager setup documentation,
-- DNS and redirect rules,
-- SSL status and remediation notes,
-- deployment runbooks,
-- operational commands,
-- future subdomain routing principles.
+- Single Ubuntu server on AWS
+- Cloudflare handles DNS
+- Nginx Proxy Manager runs in Docker and exposes ports 80/81/443
+- The portfolio is served by a dedicated Docker container
+- Docker network used for shared service connectivity: `travel-network`
 
-### `camilleaubert.com`
-Contains:
-- Astro application source code,
-- portfolio documentation,
-- content strategy,
-- design direction,
-- project framing,
-- site-level CI/CD.
+## Important server paths
 
-## Documentation
+- Proxy stack: `/home/ubuntu/apps/proxy`
+- Portfolio stack: `/home/ubuntu/apps/portfolio`
 
-Main documents:
-- [`docs/infrastructure-overview.md`](./docs/infrastructure-overview.md)
-- [`docs/repository-map.md`](./docs/repository-map.md)
-- [`docs/network-and-dns.md`](./docs/network-and-dns.md)
-- [`docs/ssl-and-exposure.md`](./docs/ssl-and-exposure.md)
-- [`docs/deployment-strategy.md`](./docs/deployment-strategy.md)
-- [`INFRASTRUCTURE.md`](./INFRASTRUCTURE.md)
+## Current deployment reality
 
-## Operations runbook
+The current portfolio deployment is not a git-based deploy on the server.
 
-### Accès serveur
+The directory `/home/ubuntu/apps/portfolio` is a server-side working directory rebuilt locally with Docker Compose. It is currently not a Git clone, so `git pull` is not part of the operational workflow.
+
+Current real-world flow:
+
+1. prepare and validate code locally
+2. sync application files to the server
+3. verify deployment files exist on the server
+4. rebuild with Docker Compose
+5. validate containers and HTTP routing
+
+## Documentation map
+
+- `docs/infrastructure-overview.md`
+- `docs/deployment-strategy.md`
+- `docs/deployment-checklist.md`
+
+## Recommended SSH access
+
+Use the configured SSH alias:
+
 ```bash
-ssh ubuntu@camilleaubert.com
+ssh camille-prod
 ```
 
-### Accès à l’admin Nginx Proxy Manager via tunnel SSH
-```bash
-ssh -L 8081:127.0.0.1:81 ubuntu@camilleaubert.com
-```
-Puis ouvrir :
-- http://127.0.0.1:8081
+## Related application repo
 
-### Emplacements des stacks
-- Proxy: `/home/ubuntu/apps/proxy`
-- Portfolio: `/home/ubuntu/apps/portfolio`
-- Legacy stoppé: `/home/ubuntu/apps/travel-planner`
+For application build, content changes, Astro structure, and app-side runbooks, see:
 
-### Conteneurs actifs attendus
-- `proxy-app-1`
-- `portfolio-astro`
-
-### Vérifier l’état des conteneurs
-```bash
-docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
-```
-
-### Redémarrer le portfolio
-```bash
-cd /home/ubuntu/apps/portfolio
-docker compose up -d --build
-```
-
-### Redémarrer le proxy
-```bash
-cd /home/ubuntu/apps/proxy
-docker compose up -d
-```
-
-### Arrêter une stack
-#### Portfolio
-```bash
-cd /home/ubuntu/apps/portfolio
-docker compose down
-```
-
-#### Proxy
-```bash
-cd /home/ubuntu/apps/proxy
-docker compose down
-```
-
-### Vérifications HTTP/HTTPS
-```bash
-curl -I http://camilleaubert.com
-curl -k -I https://camilleaubert.com
-curl -I http://www.camilleaubert.com
-curl -k -I https://www.camilleaubert.com
-```
-
-### Comportement attendu des domaines
-- `http://camilleaubert.com` → redirection vers `https://camilleaubert.com/`
-- `https://camilleaubert.com` → portfolio en 200
-- `http://www.camilleaubert.com` → redirection vers `https://camilleaubert.com`
-- `https://www.camilleaubert.com` → redirection vers `https://camilleaubert.com`
-
-### Logs utiles
-#### Portfolio
-```bash
-docker logs --tail 100 portfolio-astro
-```
-
-#### Proxy
-```bash
-docker logs --tail 100 proxy-app-1
-```
-
-### Réseau
-Le portfolio n’expose plus de port public dédié.
-Le routage se fait uniquement via Nginx Proxy Manager vers `portfolio-astro:80`.
-
-### Ports publics attendus
-- `22` SSH
-- `80` HTTP
-- `443` HTTPS
-
-## Guiding principle
-
-The infrastructure must stay:
-- simple,
-- documented,
-- secure enough,
-- future-ready for subdomains,
-- and easy to resume after a break.
+- `CamiJi/camilleaubert.com`
+- `CamiJi/camilleaubert.com/docs/deployment-runbook.md`
+- `CamiJi/camilleaubert.com/docs/operations.md`

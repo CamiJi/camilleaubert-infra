@@ -38,3 +38,12 @@ Deployment should remain:
 - documented,
 - SSH-based,
 - easy to resume after a break.
+
+## Current observed gap
+
+The current runtime still exposes application containers directly through host ports (`8080`, `8082`) in addition to the reverse proxy.
+
+Target V1 should progressively move toward:
+- public exposure through reverse proxy only,
+- removal of unnecessary direct host port exposure,
+- clearer separation between active production services and legacy services.

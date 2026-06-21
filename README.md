@@ -63,3 +63,68 @@ For application build, content changes, Astro structure, and app-side runbooks, 
 - `CamiJi/camilleaubert.com`
 - `CamiJi/camilleaubert.com/docs/deployment-runbook.md`
 - `CamiJi/camilleaubert.com/docs/operations.md`
+
+## Setup depuis un nouvel ordi
+
+Ce dépôt contient le workspace VS Code multi-root qui référence les deux repos. Pour tout reconstruire depuis zéro :
+
+### 1. Cloner les deux repos côte à côte
+
+```bash
+mkdir -p ~/dev/camilleaubert && cd ~/dev/camilleaubert
+git clone https://github.com/CamiJi/camilleaubert-infra.git
+git clone https://github.com/CamiJi/camilleaubert.com.git
+```
+
+Structure résultante :
+```
+~/dev/camilleaubert/
+├── camilleaubert.com/       ← repo application (Astro)
+└── camilleaubert-infra/     ← repo infrastructure (vous êtes ici)
+```
+
+### 2. Ouvrir le workspace
+
+```bash
+cd ~/dev/camilleaubert/camilleaubert-infra
+code camilleaubert.code-workspace
+```
+
+Le workspace charge automatiquement les deux repos en multi-root.
+
+### 3. Configurer SSH
+
+```bash
+chmod 600 ~/.ssh/lightsail-eu-west-3.pem
+```
+
+Ajouter dans `~/.ssh/config` :
+```sshconfig
+Host camille-prod
+  HostName 13.39.194.192
+  User ubuntu
+  IdentityFile ~/.ssh/lightsail-eu-west-3.pem
+  IdentitiesOnly yes
+```
+
+### 4. Installer les dépendances applicatives
+
+```bash
+cd ~/dev/camilleaubert/camilleaubert.com
+npm install
+```
+
+### 5. VS Code Copilot : tout est prêt
+
+Le workspace inclut :
+- Les **deux repos** en multi-root (portfolio + infra)
+- Le **skill de déploiement** Copilot dans `.github/skills/deploy/SKILL.md` (slash command `/deploy`)
+- La **repository memory** (chargée automatiquement par Copilot)
+
+## VS Code Copilot skills
+
+Ce dépôt contient un skill Copilot pour le déploiement :
+
+- `.github/skills/deploy/SKILL.md` — procédure complète de déploiement
+
+Invoquer avec `/deploy` dans le chat Copilot, ou simplement demander "on redéploie ?".

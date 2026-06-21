@@ -7,6 +7,10 @@
     {
       "name": "infra",
       "path": "."
+    },
+    {
+      "name": "nestor",
+      "path": "../nestor-le-groom"
     }
   ],
   "settings": {

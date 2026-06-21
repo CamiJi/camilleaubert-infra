@@ -125,3 +125,16 @@ CMD ["nginx", "-g", "daemon off;"]
 
 - Application : `CamiJi/camilleaubert.com` (`~/dev/camilleaubert/camilleaubert.com`)
 - Infrastructure : `CamiJi/camilleaubert-infra` (`~/dev/camilleaubert/camilleaubert-infra`)
+- Nestor Le Groom : `CamiJi/nestor-le-groom` (`~/dev/camilleaubert/nestor-le-groom`)
+
+## Skills liés
+
+- **`deploy-nestor`** — Déploiement de Nestor Le Groom (Laravel + MySQL)
+- **`deploy-infra`** — Gestion infrastructure partagée (upgrade AWS, NPM, DNS)
+
+## Notes importantes
+
+- Le serveur héberge **plusieurs projets** Docker sur le même réseau `travel-network`
+- Ne jamais utiliser `rsync --delete` global — les fichiers Docker sont parfois uniquement sur le serveur
+- Après un upgrade AWS Lightsail, vérifier le firewall (port 443 souvent manquant)
+- Pour ajouter un nouveau service, suivre la checklist dans `deploy-infra`

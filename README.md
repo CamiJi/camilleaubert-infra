@@ -70,6 +70,16 @@ Ce dépôt contient le workspace VS Code multi-root qui référence les deux rep
 
 ### 1. Cloner les deux repos côte à côte
 
+Sur le poste principal (workspace CEGOS), les repos vivent dans `sideprojects/` :
+
+```bash
+cd /var/www/html/sideprojects
+git clone https://github.com/CamiJi/camilleaubert-infra.git
+git clone https://github.com/CamiJi/camilleaubert.com.git
+```
+
+Sur une autre machine (layout historique) :
+
 ```bash
 mkdir -p ~/dev/camilleaubert && cd ~/dev/camilleaubert
 git clone https://github.com/CamiJi/camilleaubert-infra.git
@@ -95,7 +105,7 @@ Le workspace charge automatiquement les deux repos en multi-root.
 ### 3. Configurer SSH
 
 ```bash
-chmod 600 ~/.ssh/lightsail-eu-west-3.pem
+chmod 600 ~/.ssh/camille-prod-lightsail
 ```
 
 Ajouter dans `~/.ssh/config` :
@@ -103,9 +113,12 @@ Ajouter dans `~/.ssh/config` :
 Host camille-prod
   HostName 13.39.194.192
   User ubuntu
-  IdentityFile ~/.ssh/lightsail-eu-west-3.pem
+  IdentityFile ~/.ssh/camille-prod-lightsail
   IdentitiesOnly yes
 ```
+
+> Clé Ed25519 dédiée au poste, générée le 2026-09-12. Procédure de bootstrap
+> et de révocation : `docs/server-access.md`.
 
 ### 4. Installer les dépendances applicatives
 

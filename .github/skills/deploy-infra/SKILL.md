@@ -18,7 +18,7 @@ Le serveur AWS Lightsail héberge plusieurs projets Docker sur une même instanc
 | IP statique | `13.39.194.192` |
 | Région | eu-west-3 (Paris) |
 | OS | Ubuntu 22.04 |
-| SSH | `ssh camille-prod` (user `ubuntu`, clé `~/.ssh/lightsail-eu-west-3.pem`) |
+| SSH | `ssh camille-prod` (user `ubuntu`, clé `~/.ssh/camille-prod-lightsail` (Ed25519)) |
 | Config SSH | `~/.ssh/config` → Host camille-prod |
 
 ## Architecture

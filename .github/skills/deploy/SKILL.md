@@ -18,7 +18,7 @@ Déploie le portfolio Astro sur le serveur AWS de production via rsync + Docker 
 | Reverse Proxy | Nginx Proxy Manager (Docker, `proxy-app-1`) |
 | Site | Astro + Nginx (Docker, `portfolio-astro`) |
 | Réseau | `travel-network` (externe, partagé) |
-| SSH | `ssh camille-prod` (user `ubuntu`, clé `~/.ssh/lightsail-eu-west-3.pem`) |
+| SSH | `ssh camille-prod` (user `ubuntu`, clé `~/.ssh/camille-prod-lightsail` (Ed25519)) |
 
 ## Procédure de déploiement
 

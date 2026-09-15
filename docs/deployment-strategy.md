@@ -58,6 +58,7 @@ Check that the server still has:
 
 - `docker-compose.yml`
 - `Dockerfile`
+- `nginx.conf`
 
 and validate Compose config:
 
@@ -103,7 +104,7 @@ networks:
 ### `Dockerfile`
 
 ```dockerfile
-FROM node:20-alpine AS builder
+FROM node:22.12-alpine AS builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -115,10 +116,18 @@ RUN npm run build
 
 FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/nginx.conf /etc/nginx/conf.d/default.conf
+RUN nginx -t
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
+
+### `nginx.conf`
+
+Versioned in the app repo (`camilleaubert.com/nginx.conf`), synced to the
+server by the CI deploy workflow. Sets HTTP caching (immutable hashed assets,
+revalidated HTML), baseline security headers, gzip and the pretty `404.html`.
 
 ## Known risks in the current model
 

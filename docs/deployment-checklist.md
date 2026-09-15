@@ -30,6 +30,7 @@ npm run build
 - [ ] `package.json` synced
 - [ ] `package-lock.json` synced
 - [ ] `astro.config.mjs` synced
+- [ ] `Dockerfile` + `nginx.conf` synced
 
 Recommended commands:
 
@@ -39,12 +40,14 @@ rsync -avz ./public/ camille-prod:/home/ubuntu/apps/portfolio/public/
 rsync -avz ./package.json camille-prod:/home/ubuntu/apps/portfolio/
 rsync -avz ./package-lock.json camille-prod:/home/ubuntu/apps/portfolio/
 rsync -avz ./astro.config.mjs camille-prod:/home/ubuntu/apps/portfolio/
+rsync -avz ./Dockerfile ./nginx.conf camille-prod:/home/ubuntu/apps/portfolio/
 ```
 
 ## 3. Verify server-side deployment files
 
 - [ ] `docker-compose.yml` exists in `/home/ubuntu/apps/portfolio`
 - [ ] `Dockerfile` exists in `/home/ubuntu/apps/portfolio`
+- [ ] `nginx.conf` exists in `/home/ubuntu/apps/portfolio`
 - [ ] `docker compose config` is valid
 
 Commands:
